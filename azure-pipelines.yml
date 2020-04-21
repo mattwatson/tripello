@@ -33,7 +33,7 @@ stages:
     - script: dotnet build --configuration $(buildConfiguration) src/Tripello.Server.Web
       displayName: '$(buildConfiguration) build'
 
-- stage: Build and publish image
+- stage: BuildAndPublishImage
   displayName: Build and publish image
   jobs:
   - job: Build
