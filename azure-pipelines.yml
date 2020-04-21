@@ -13,7 +13,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  tag: '$(Build.BuildNumber)'
   buildConfiguration: 'Release'
 
 
@@ -46,9 +46,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          '$(tag)'
-          'latest'
+        tags: '$(tag)'
 
     - task: Docker@2
       displayName: Log in to Docker Hub
