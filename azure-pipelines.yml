@@ -9,10 +9,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-- group: Variables
-- name: buildConfiguration
-  value: 'Release'
+# variables:
+# - group: Variables
+# - name: buildConfiguration
+#   value: 'Release'
 
 steps:
 #- script: dotnet restore src/Tripello.Server.Web
