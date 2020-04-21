@@ -47,7 +47,8 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
-          $(tag)
+          '$(tag)'
+          'latest'
 
     - task: Docker@2
       displayName: Log in to Docker Hub
