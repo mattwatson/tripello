@@ -13,10 +13,10 @@ resources:
 - repo: self
 
 variables:
+  dockerId: mattwatson1
+  imageName: tripello
   tag: '$(Build.BuildNumber)'
   buildConfiguration: 'Release'
-
-
 
 stages:
 - stage: Build
@@ -41,12 +41,15 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: '$(tag)'
+    # - task: Docker@2
+    #   displayName: Docker Build
+    #   inputs:
+    #     command: build
+    #     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+    #     tags: '$(tag)'
+    # Manual command because Docker@2 didn't want to tag my image =(
+    - script: docker build -t $(dockerId)/$(imageName):$(tag) .
+      displayName: 'Docker Build'
 
     - task: Docker@2
       displayName: Log in to Docker Hub
@@ -58,6 +61,7 @@ stages:
       displayName: Push the image to Docker Hub
       inputs:
         containerRegistry: 'DockerHub-mattwatson1'
-        repository: 'tripello'
+        repository: '$(imageName)'
         command: 'push'
         tags: '$(tag)'
+
