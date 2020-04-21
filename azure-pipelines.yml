@@ -1,6 +1,10 @@
 # Docker
-# Build a Docker image 
+# Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
 - master
@@ -10,11 +14,20 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
+#  buildConfiguration: 'Release'
+
+# Might want to check that the code builds outside a container?
+# - script: dotnet restore src/Tripello.Server.Web
+#   displayName: 'Confirm Restore dependencies'
+
+# - script: dotnet build --configuration $(buildConfiguration) src/Tripello.Server.Web
+#   displayName: '$(buildConfiguration) build'
+
 
 stages:
 - stage: Build
   displayName: Build image
-  jobs:  
+  jobs:
   - job: Build
     displayName: Build
     pool:
@@ -27,3 +40,28 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+
+- stage: Publish
+  displayName: Publish image
+  jobs:
+  - job: Publish
+    displayName: Publish
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerHub-mattwatson1'
+        command: 'login'
+    # Manual commands
+    #- script: docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(tag) .
+    #  displayName: 'Docker Build'
+    #- script: docker push $(dockerId)/$(imageName):$(tag)
+   #  displayName: 'Docker Push tag'
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerHub-mattwatson1'
+        repository: 'tripello'
+        command: 'push'
+        tags: '$(tag)'
