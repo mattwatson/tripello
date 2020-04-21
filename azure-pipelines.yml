@@ -57,11 +57,13 @@ stages:
         containerRegistry: 'DockerHub-mattwatson1'
         command: 'login'
 
-    - task: Docker@2
-      displayName: Push the image to Docker Hub
-      inputs:
-        containerRegistry: 'DockerHub-mattwatson1'
-        repository: '$(imageName)'
-        command: 'push'
-        tags: '$(tag)'
-
+    # - task: Docker@2
+    #   displayName: Push the image to Docker Hub
+    #   inputs:
+    #     containerRegistry: 'DockerHub-mattwatson1'
+    #     repository: '$(imageName)'
+    #     command: 'push'
+    #     tags: '$(tag)'
+    # Manual command because Docker@2 didn't want to find my image =(
+    - script: docker push $(dockerId)/$(imageName):$(tag)
+      displayName: 'Docker Build'
