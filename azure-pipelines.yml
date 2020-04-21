@@ -20,18 +20,19 @@ steps:
 #- script: dotnet build --configuration $(buildConfiguration) src/KongoloGym
 #  displayName: '$(buildConfiguration) build'
 
-
 - task: Docker@2
   inputs:
-    containerRegistry: 'DockerHub ($(dockerId))'
+    containerRegistry: 'DockerHub-mattwatson1'
     command: 'login'
 
 #- script: docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(tag) .
 #  displayName: 'Docker Build'
 #- script: docker push $(dockerId)/$(imageName):$(tag)
 #  displayName: 'Docker Push tag'
-
 - task: Docker@2
   inputs:
+    containerRegistry: 'DockerHub-mattwatson1'
+    repository: 'tripello'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
+
