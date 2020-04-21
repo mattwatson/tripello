@@ -36,7 +36,7 @@ stages:
 - stage: BuildAndPublishImage
   displayName: Build and publish image
   jobs:
-  - job: Build
+  - job: BuildAndPublish
     displayName: Build
     pool:
       vmImage: 'ubuntu-latest'
@@ -49,11 +49,6 @@ stages:
         tags: |
           $(tag)
 
-  - job: Publish
-    displayName: Publish
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
     - task: Docker@2
       displayName: Log in to Docker Hub
       inputs:
