@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/server-web-cs/server-web-cs.csproj",
+                "${workspaceFolder}/src/Tripello.Server.Web/Tripello.Server.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/server-web-cs/server-web-cs.csproj",
+                "${workspaceFolder}/src/Tripello.Server.Web/Tripello.Server.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/server-web-cs/server-web-cs.csproj",
+                "${workspaceFolder}/src/Tripello.Server.Web/Tripello.Server.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
