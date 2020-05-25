@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Tripello.Server.Web.Data;
+using Tripello.Server.Web.Services.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,13 +37,7 @@ namespace Tripello.Server.Web
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
-
-            var dpApiOptions = this.Configuration.GetSection("DPAPI").Get<DPApiOptions>();
-            if (dpApiOptions != null && dpApiOptions.Enabled && !String.IsNullOrWhiteSpace(dpApiOptions.FileLocation))
-            {
-                services.AddDataProtection()
-                    .PersistKeysToFileSystem(new DirectoryInfo(dpApiOptions.FileLocation));
-            }
+            services.AddDataProtectionWithDPApiOptions(this.Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
