@@ -21,17 +21,17 @@ namespace Tripello.Server.Web.Services.Email
         public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
         {
             options = optionsAccessor.Value;
-            if (String.Is.IsNullOrEmpty(options.SendGridUser))
+            if (String.IsNullOrEmpty(options.SendGridUser))
             {
                 throw new ArgumentException("Must specify AuthMessageSender.SendGridUser if using AuthMessageSender");
             }
 
-            if (String.Is.IsNullOrEmpty(options.SendGridKey))
+            if (String.IsNullOrEmpty(options.SendGridKey))
             {
                 throw new ArgumentException("Must specify AuthMessageSender.SendGridKey if using AuthMessageSender");
             }
 
-            if (String.Is.IsNullOrEmpty(options.FromAddress))
+            if (String.IsNullOrEmpty(options.FromAddress))
             {
                 throw new ArgumentException("Must specify AuthMessageSender.FromAddress if using AuthMessageSender");
             }
