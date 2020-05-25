@@ -37,8 +37,8 @@ namespace Tripello.Server.Web
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            var authEmailEnabled = this.Configuration.GetSection("AuthMessageSender").Value != null;
-            if (authEmailEnabled)
+            var authEmailEnabled = this.Configuration.GetSection("AuthMessageSender").Get<AuthMessageSenderOptions>();
+            if (authEmailEnabled != null)
             {
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<ApplicationDbContext>();
