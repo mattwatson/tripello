@@ -1,9 +1,12 @@
 using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Threading.Tasks;
+using Tripello.Server.Web.Data;
 
 namespace Tripello.Server.Web.Services.Email
 {
@@ -11,16 +14,25 @@ namespace Tripello.Server.Web.Services.Email
     {
         public string SendGridUser { get; set; }
         public string SendGridKey { get; set; }
-        public string FromAddress { get; set;}
-    }
+        public string FromAddress { get; set; }
+
+        public bool IsValid
+        {
+            get {
+                return !String.IsNullOrEmpty(SendGridUser)
+                    && !String.IsNullOrEmpty(SendGridKey)
+                    && !String.IsNullOrEmpty(FromAddress);
+            }
+        }
+    }    
 
     public class EmailSender : IEmailSender
     {
         private readonly AuthMessageSenderOptions options;
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        public EmailSender(AuthMessageSenderOptions options)
         {
-            options = optionsAccessor.Value;
+            this.options = options;
             if (String.IsNullOrEmpty(options.SendGridUser))
             {
                 throw new ArgumentException("Must specify AuthMessageSender.SendGridUser if using AuthMessageSender");
@@ -61,4 +73,27 @@ namespace Tripello.Server.Web.Services.Email
             return client.SendEmailAsync(msg);
         }
     }
+
+    public static class EmailExtenisions
+    {
+        public static IServiceCollection AddAuthenticationWithOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            var authMessageSenderOptions = configuration.GetSection("AuthMessageSender").Get<AuthMessageSenderOptions>();
+            if (authMessageSenderOptions != null && authMessageSenderOptions.IsValid)
+            {
+                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
+                services.AddTransient<IEmailSender, EmailSender>();
+                services.AddSingleton<AuthMessageSenderOptions>(authMessageSenderOptions);
+            }
+            else
+            {
+                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
+            }
+
+            return services;
+        }
+    }
+
 }

@@ -37,19 +37,7 @@ namespace Tripello.Server.Web
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            var authEmailEnabled = this.Configuration.GetSection("AuthMessageSender").Get<AuthMessageSenderOptions>();
-            if (authEmailEnabled != null)
-            {
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
-                services.AddTransient<IEmailSender, EmailSender>();
-                services.Configure<AuthMessageSenderOptions>(Configuration);
-            }
-            else
-            {
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
-            }
+            services.AddAuthenticationWithOptions(this.Configuration);
 
             services.AddRazorPages();
             services.AddDataProtectionWithDPApiOptions(this.Configuration);
