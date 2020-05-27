@@ -60,7 +60,7 @@ namespace Tripello.Server.Web
 
             app.UseForwardedHeaders(
                 new ForwardedHeadersOptions
-                    { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+                    { ForwardedHeaders = ForwardedHeaders.All });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
