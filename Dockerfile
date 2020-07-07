@@ -1,19 +1,30 @@
 # Build and publish the app
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
-WORKDIR /app
+WORKDIR /Tripello.Server.Web
 
 # Copy project files and restore as distinct layers
 COPY src/Tripello.Server.Web/*.csproj ./
-RUN dotnet restore
+RUN dotnet restore ./
 
 # Copy everything else and build
 COPY src/Tripello.Server.Web ./
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o out ./
+
+WORKDIR /Tripello.Tool
+COPY src/Tripello.Tool/*.fsproj ./
+RUN dotnet restore ./
+
+COPY src/Tripello.Tool ./
+RUN dotnet publish -c Release -o out ./
 
 #Build runtime docker image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 as runtime-env
+
+WORKDIR /tool
+COPY --from=build-env /Tripello.Tool/out .
+
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=build-env /Tripello.Server.Web/out .
 
 EXPOSE 80
 EXPOSE 443
