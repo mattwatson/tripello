@@ -11,10 +11,10 @@ COPY src/Tripello.Server.Web ./
 RUN dotnet publish -c Release -o out ./
 
 WORKDIR /Tripello.Tool
-COPY src/Tripello.Tool/*.fsproj ./
+COPY tool/Tripello.Tool/*.fsproj ./
 RUN dotnet restore ./
 
-COPY src/Tripello.Tool ./
+COPY tool/Tripello.Tool ./
 RUN dotnet publish -c Release -o out ./
 
 #Build runtime docker image
