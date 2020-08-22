@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../Tripello.Server.Web/Tripello.Server.Web.csproj">
+    <ProjectReference Include="../../src/Tripello.Server.Web/Tripello.Server.Web.csproj">
       <Name>Tripello.Server.Web.csproj</Name>
     </ProjectReference>
   </ItemGroup>
